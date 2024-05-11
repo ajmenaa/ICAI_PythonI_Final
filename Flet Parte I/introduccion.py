@@ -11,12 +11,17 @@ def main(page: Page):
     def sumar_click(event):
         txt_numero.value = int(txt_numero.value) + 1
         page.update()
+        
+    def restar_click(event):
+        txt_numero.value = int(txt_numero.value) - 1
+        txt_numero.update()
     
+
     #Dibujar UI 
     page.add(
         Row(
             [
-                IconButton(icon='REMOVE',icon_color="pink600",tooltip="Restar Número"),
+                IconButton(icon='REMOVE',icon_color="pink600",tooltip="Restar Número", on_click=restar_click),
                 txt_numero,
                 IconButton(
                             icons.ADD, 
