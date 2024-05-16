@@ -1,6 +1,10 @@
 import flet
 import pandas as pd
+import matplotlib
+import matplotlib.pyplot as plt
 
+
+from flet.matplotlib_chart import MatplotlibChart
 from flet import *
 from data_dolar import obtener_datos
 
@@ -28,6 +32,7 @@ def main(page: flet.Page):
     
     btn_graficar = ElevatedButton(text=('Graficar'))
     
+    grafico = 
     
     #Dibujar UI 
     page.add(
