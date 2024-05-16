@@ -20,8 +20,16 @@ def main(page: flet.Page):
         tipo_cambio_valores = data[tipo_cambio]
 
         # Crear line plot
-        plt.
+        plt.figure()
+        plt.plot(entidades,tipo_cambio_valores)
         
+        #Personalizar el grafico = plot
+        plt.xlabel('Entidades Financieras')
+        plt.ylabel(f'Tipo Cambio {tipo_cambio}')
+        plt.title(f'Tipo cambio {tipo_cambio} en colones por Dolar')
+        
+        return plt
+                
     #Definir Controles
     cbx_tipo_cambio = Dropdown(
         options=[
@@ -40,7 +48,7 @@ def main(page: flet.Page):
     
     btn_graficar = ElevatedButton(text=('Graficar'))
     
-    grafico = MatplotlibChart(plt, expand=True)
+    grafico = MatplotlibChart(dibujar_grafico(df_data,'Venta'), expand=True)
     
     #Dibujar UI 
     page.add(
@@ -54,7 +62,7 @@ def main(page: flet.Page):
         ),
         Row(
             [
-             
+             grafico
             ],
             alignment='center'
         )
