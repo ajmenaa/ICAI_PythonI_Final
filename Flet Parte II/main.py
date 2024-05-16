@@ -20,43 +20,74 @@ def main(page: flet.Page):
         tipo_cambio_valores = data[tipo_cambio]
 
         # Crear line plot
-        plt.figure()
-        plt.plot(entidades,tipo_cambio_valores)
+        plt.figure(figsize=(20,10))
+        plt.plot(entidades,tipo_cambio_valores, marker='o',linestyle='-',color='g')
         
         #Personalizar el grafico = plot
         plt.xlabel('Entidades Financieras')
         plt.ylabel(f'Tipo Cambio {tipo_cambio}')
         plt.title(f'Tipo cambio {tipo_cambio} en colones por Dolar')
         
+        plt.xticks(rotation=90)
+        plt.grid(True)
+        plt.tight_layout()
         return plt
-                
+    
+    def graficar_click(event):
+        tipo_cambio_seleccionado = cbx_tipo_cambio.value 
+        if cbx_tipo_entidad.value == 'TODOS':
+            if sw_ordenar.value == True:
+                df_data['Compra'].sort_values();
+            else:
+                df_data['Entidad'].sort_values();
+            grafico.current = MatplotlibChart(dibujar_grafico(df_data,tipo_cambio_seleccionado))
+        else:
+            data_filtrado = df_data[df_data['Tipo'] == cbx_tipo_entidad.value]
+            if sw_ordenar.value == True:
+                data_filtrado['Compra'].sort_values();
+            else:
+                data_filtrado['Entidad'].sort_values();
+            print(data_filtrado)
+            grafico.current = MatplotlibChart(dibujar_grafico(data_filtrado,tipo_cambio_seleccionado))
+        grafico.update()
     #Definir Controles
     cbx_tipo_cambio = Dropdown(
         options=[
             dropdown.Option('Venta'),
             dropdown.Option('Compra')
         ],
-        width=300
+        width=300,
+        on_change=graficar_click
     )
     
     cbx_tipo_entidad = Dropdown( # Creo filtro por tio entidad
-        width=400
+                                options=[dropdown.Option('TODOS')],
+        width=400,
+        on_change=graficar_click
     )
     
     for entidad in df_data['Tipo'].sort_values().unique():  # Cargo Filtro por tipo entidad
         cbx_tipo_entidad.options.append(dropdown.Option(entidad))
     
-    btn_graficar = ElevatedButton(text=('Graficar'))
+    btn_graficar = ElevatedButton(text=('Graficar'), on_click=graficar_click)
     
-    grafico = MatplotlibChart(dibujar_grafico(df_data,'Venta'), expand=True)
+    df_data['Entidad'].sort_values();
+    grafico = MatplotlibChart(
+        dibujar_grafico(df_data,'Venta'),
+        expand=True)
     
+    
+    cbx_tipo_cambio.value = 'Venta'
+    cbx_tipo_entidad.value = 'TODOS'
+    
+    sw_ordenar = Switch(label="Ordenar datos", value=False)
     #Dibujar UI 
     page.add(
         Row(
             [
              cbx_tipo_cambio,
              cbx_tipo_entidad,
-             btn_graficar
+             sw_ordenar
             ],
             alignment='center'
         ),
