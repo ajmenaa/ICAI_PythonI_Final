@@ -8,12 +8,20 @@ from flet.matplotlib_chart import MatplotlibChart
 from flet import *
 from data_dolar import obtener_datos
 
+matplotlib.use("svg")
+
 def main(page: flet.Page):
     df_data = obtener_datos()
     print(df_data)
 
-    
-    
+    def dibujar_grafico(data, tipo_cambio):
+        # Extraer datos
+        entidades = data['Entidad']
+        tipo_cambio_valores = data[tipo_cambio]
+
+        # Crear line plot
+        plt.
+        
     #Definir Controles
     cbx_tipo_cambio = Dropdown(
         options=[
@@ -32,7 +40,7 @@ def main(page: flet.Page):
     
     btn_graficar = ElevatedButton(text=('Graficar'))
     
-    grafico = 
+    grafico = MatplotlibChart(plt, expand=True)
     
     #Dibujar UI 
     page.add(
