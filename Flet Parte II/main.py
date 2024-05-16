@@ -36,7 +36,7 @@ def main(page: flet.Page):
     def graficar_click(event):
         tipo_cambio_seleccionado = cbx_tipo_cambio.value 
         if sw_ordenar.value == True:
-            df_data.sort_values(by='Compra',inplace=True);
+            df_data.sort_values(by=tipo_cambio_seleccionado,inplace=True);
         else:
             df_data.sort_values(by='Entidad',inplace=True);
         if cbx_tipo_entidad.value == 'TODOS':            
