@@ -35,18 +35,14 @@ def main(page: flet.Page):
     
     def graficar_click(event):
         tipo_cambio_seleccionado = cbx_tipo_cambio.value 
-        if cbx_tipo_entidad.value == 'TODOS':
-            if sw_ordenar.value == True:
-                df_data['Compra'].sort_values();
-            else:
-                df_data['Entidad'].sort_values();
+        if sw_ordenar.value == True:
+            df_data.sort_values(by='Compra',inplace=True);
+        else:
+            df_data.sort_values(by='Entidad',inplace=True);
+        if cbx_tipo_entidad.value == 'TODOS':            
             grafico.current = MatplotlibChart(dibujar_grafico(df_data,tipo_cambio_seleccionado))
         else:
             data_filtrado = df_data[df_data['Tipo'] == cbx_tipo_entidad.value]
-            if sw_ordenar.value == True:
-                data_filtrado['Compra'].sort_values();
-            else:
-                data_filtrado['Entidad'].sort_values();
             print(data_filtrado)
             grafico.current = MatplotlibChart(dibujar_grafico(data_filtrado,tipo_cambio_seleccionado))
         grafico.update()
@@ -71,16 +67,15 @@ def main(page: flet.Page):
     
     btn_graficar = ElevatedButton(text=('Graficar'), on_click=graficar_click)
     
-    df_data['Entidad'].sort_values();
     grafico = MatplotlibChart(
-        dibujar_grafico(df_data,'Venta'),
+        dibujar_grafico(df_data.sort_values(by='Entidad'),'Venta'),
         expand=True)
     
     
     cbx_tipo_cambio.value = 'Venta'
     cbx_tipo_entidad.value = 'TODOS'
     
-    sw_ordenar = Switch(label="Ordenar datos", value=False)
+    sw_ordenar = Switch(label="Ordenar datos", value=False, on_change=graficar_click)
     #Dibujar UI 
     page.add(
         Row(
